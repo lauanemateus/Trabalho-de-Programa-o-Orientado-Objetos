@@ -1,5 +1,6 @@
 package lojavirtual;
 
+import java.util.Random;
 import java.util.Scanner;
 
 // https://www.youtube.com/watch?v=WPdrnuSHAQs
@@ -32,7 +33,7 @@ class PagamentoCartao implements Comportamento {
 		somenteNumeros = true;
 		// verificamos se cada caracter do numero do cartao é numero
 		for(int i=0; i<quantidadeDigitos; i++) {
-			if(numeroCartao.charAt(i)>='0' && numeroCartao.charAt(i)<='9') {
+			if(Character.isDigit(numeroCartao.charAt(i))==false) {
 				somenteNumeros = false;
 			}
 		}
@@ -46,7 +47,7 @@ class PagamentoCartao implements Comportamento {
 			
 			// verificamos se cada caracter do numero do cartao é numero
 			for(int i=0; i<quantidadeDigitos; i++) {
-				if(numeroCartao.charAt(i)>='0' && numeroCartao.charAt(i)<='9') {
+				if(Character.isDigit(numeroCartao.charAt(i))==false) {
 					somenteNumeros = false;
 				}
 			}
@@ -57,11 +58,17 @@ class PagamentoCartao implements Comportamento {
     	
     	// leitura do nome
     	System.out.println("Digite o nome do titular:\n");
-		nomeTitular = input.next(); 
+    	
+    	//lê a quebra de linha    	
+		nomeTitular = input.nextLine(); 
+		// lê uma linha inteira		
+		nomeTitular = input.nextLine();
+		
 		somenteLetras = true;
 		// verificamos se cada caracter do nome é letra
-		for(int i=0; i<quantidadeDigitos; i++) {
-			if((numeroCartao.charAt(i)>='a' && numeroCartao.charAt(i)<='z') || (numeroCartao.charAt(i)>='A' && numeroCartao.charAt(i)<='Z')) {
+		for(int i=0; i<nomeTitular.length(); i++) {
+			if(nomeTitular.charAt(i)==' ') continue;
+			if(Character.isLetter(nomeTitular.charAt(i))==false) {
 				somenteLetras = false;
 			}
 		}
@@ -69,25 +76,97 @@ class PagamentoCartao implements Comportamento {
 		while(somenteLetras==false) {	
 			System.out.println("Nome inválido! Digite o nome do titular exatamente como escrito no cartão");
 			System.out.println("Digite o nome do titular:\n");
-			nomeTitular = input.next(); 
-			somenteNumeros = true;
 			
-			// verificamos se cada caracter do numero do cartao é numero
-			for(int i=0; i<quantidadeDigitos; i++) {
-				if((numeroCartao.charAt(i)>='a' && numeroCartao.charAt(i)<='z') || (numeroCartao.charAt(i)>='A' && numeroCartao.charAt(i)<='Z')) {
+			// lê uma linha inteira		
+			nomeTitular = input.nextLine();
+			
+			somenteLetras = true;
+			
+			// verificamos se cada caracter do numero do cartao é letra
+			for(int i=0; i<nomeTitular.length(); i++) {
+				if(nomeTitular.charAt(i)==' ') continue;
+				if(Character.isLetter(nomeTitular.charAt(i))==false) {
 					somenteLetras = false;
 				}
 			}
 		}
 		
+		
+    	boolean dataCorreta = true; // variável que verifica se a string lida é coerente com um data no formato "dd/mm/aaaa"
+    	
+    	// leitura do data
+    	System.out.println("Digite a data de vencimento no formato \"dd/mm/aaaa\" :\n");
+		dataVencimento = input.next();
+		quantidadeDigitos = dataVencimento.length();  
+	
+		if(quantidadeDigitos!=10) {
+			dataCorreta = false;
+		}
+    	for(int i=0; i<quantidadeDigitos; i++) {
+    		if(i==2 || i==5) {
+    			if(dataVencimento.charAt(i)!='/') {
+    				dataCorreta = false;
+    			}
+    		}
+    		else if(Character.isDigit( dataVencimento.charAt(i) ) == false) {
+    			dataCorreta = false;
+    		}
+    	}
+		
+		while(quantidadeDigitos!=10 || dataCorreta==false) {	
+			System.out.println("Data inválida!");
+			System.out.println("Digite a data de vencimento no formato \"dd/mm/aaaa\" :\n");
+			
+			dataVencimento = input.next();
+			quantidadeDigitos = dataVencimento.length();  
+			dataCorreta = true;
+			
+			if(quantidadeDigitos!=10) {
+				dataCorreta = false;
+			}
+	    	for(int i=0; i<quantidadeDigitos; i++) {
+	    		if(i==2 || i==5) {
+	    			if(dataVencimento.charAt(i)!='/') {
+	    				dataCorreta = false;
+	    			}
+	    		}
+	    		else if(Character.isDigit( dataVencimento.charAt(i) ) == false) {
+	    			dataCorreta = false;
+	    		}
+	    	}
+		}
+		
+		// leitura do código de segurança
+    	System.out.println("Digite o código de segurança:\n");
+    	codigoSegurançaTresDigitos = input.next();
+    	boolean codigoSegurançaCorreto = true;
+		if(codigoSegurançaTresDigitos.length() != 3 || Character.isDigit(codigoSegurançaTresDigitos.charAt(0))==false 
+				|| Character.isDigit(codigoSegurançaTresDigitos.charAt(1))==false || Character.isDigit(codigoSegurançaTresDigitos.charAt(2))==false) {
+			codigoSegurançaCorreto = false;
+		}
+				
+		while(codigoSegurançaCorreto == false) {
+			System.out.println("Código de segurança incorreto!");
+			System.out.println("Digite o código de segurança:\n");
+	    	codigoSegurançaTresDigitos = input.next();
+	    	codigoSegurançaCorreto = true;
+			if(codigoSegurançaTresDigitos.length() != 3 || Character.isDigit(codigoSegurançaTresDigitos.charAt(0))==false 
+					|| Character.isDigit(codigoSegurançaTresDigitos.charAt(1))==false || Character.isDigit(codigoSegurançaTresDigitos.charAt(2))==false) {
+				codigoSegurançaCorreto = false;
+			}
+		}
+		
+		System.out.println("Pagamento efetuado!");
+		System.out.println("Dados do Titular:\n" + "Nome: " + nomeTitular + "\nNumero do cartão: " + numeroCartao + "\nData de vencimento: " + dataVencimento);
     }
 }
 
 // Implementação do Comportamento B
-class ComportamentoB implements Comportamento {
+class PagamentoPix implements Comportamento {
     @Override
     public void executar() {
-        System.out.println("Executando Comportamento B");
+    	Random codigoPix = new Random();
+        System.out.println("Código pix para efetuar pagamento: " + codigoPix.nextInt(1000000000) + codigoPix.nextInt(1000000000) + codigoPix.nextInt(1000000000));
     }
 }
 

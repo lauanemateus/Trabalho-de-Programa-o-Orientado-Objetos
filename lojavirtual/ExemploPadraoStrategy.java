@@ -7,19 +7,18 @@ import java.util.Scanner;
 
 // Interface que define o comportamento
 interface Comportamento {
-    void executar();
+    void executar(Scanner input);
 }
 
 // Implementação do Comportamento PagamentoCartao
 class PagamentoCartao implements Comportamento {
-	Scanner input = new Scanner(System.in);
 	String numeroCartao;
 	String nomeTitular;
 	String dataVencimento;
 	String codigoSegurançaTresDigitos;
 	
     @Override
-    public void executar() {
+    public void executar(Scanner input) {
     	
     	// variaveis para verificar se o numero do cartao é valido
     	int quantidadeDigitos; // variável que quarta a quantidade de digitos que o usuário escreveu
@@ -164,7 +163,7 @@ class PagamentoCartao implements Comportamento {
 // Implementação do Comportamento B
 class PagamentoPix implements Comportamento {
     @Override
-    public void executar() {
+    public void executar(Scanner input) {
     	Random codigoPix = new Random();
         System.out.println("Código pix para efetuar pagamento: " + codigoPix.nextInt(1000000000) + codigoPix.nextInt(1000000000) + codigoPix.nextInt(1000000000));
     }
@@ -180,8 +179,8 @@ class Contexto {
     }
 
     // Método que executa o comportamento atual
-    public void executarComportamento() {
-        comportamento.executar();
+    public void executarComportamento(Scanner input) {
+        comportamento.executar(input);
     }
 
     // Método que permite alterar o comportamento em tempo de execução

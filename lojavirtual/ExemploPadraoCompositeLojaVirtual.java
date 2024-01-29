@@ -12,11 +12,14 @@ interface Componente {
 class Produto implements Componente {
     private String nome;
     private double preco;
-    private String codigoIdentificador;
-
-    public Produto(String nome, double preco, String codigoIdentificador) {
+    private int codigoIdentificador;
+    protected Estoque estoque = new Estoque();
+    
+    public Produto(String nome, double preco, int codigoIdentificador, int quantidadeUnidades){
         this.nome = nome;
         this.preco = preco;
+        this.codigoIdentificador = codigoIdentificador;
+        this.estoque.setTodosTamanhos(quantidadeUnidades);
     }
 
     @Override
@@ -25,11 +28,11 @@ class Produto implements Componente {
     	return preco;
     }
     
-    public String getCodigoIdentificador() {
+    public int getCodigoIdentificador() {
 		return codigoIdentificador;
 	}
 
-	public void setCodigoIdentificador(String codigoIdentificador) {
+	public void setCodigoIdentificador(int codigoIdentificador) {
 		this.codigoIdentificador = codigoIdentificador;
 	}
 
@@ -50,6 +53,10 @@ class Produto implements Componente {
 		this.preco = preco;
 	}
 	
+	public void printarProduto() {
+		System.out.println("Código do produto: " + codigoIdentificador + "\nProduto: "+ nome + "\nPreço: " + preco);
+	}
+	
 }
 
 // Composto (categoria que pode conter produtos e/ou subcategorias)
@@ -57,6 +64,15 @@ class Categoria implements Componente {
     private String nome;
     private List<Componente> componentes = new ArrayList<>();
 
+    public Produto getProduto(int codigoIdentificador) {
+    	for(int i=0; i<componentes.size(); i++) {
+    		if( ((Produto)componentes.get(i)).getCodigoIdentificador() == codigoIdentificador) {
+    			return (Produto)componentes.get(i);
+    		}
+    	}
+    	return new Produto("Produto não encontrado", 0, -1, 0);
+    }
+    
     public Categoria(String nome) {
         this.nome = nome;
     }
@@ -76,6 +92,7 @@ class Categoria implements Componente {
         for (Componente componente : componentes) {
             precoTotal += componente.calcularPreco();
         }
+        System.out.print("\n");
         return precoTotal;
     }
 }

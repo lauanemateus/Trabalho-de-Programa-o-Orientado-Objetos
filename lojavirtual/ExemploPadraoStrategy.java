@@ -3,6 +3,7 @@ package lojavirtual;
 import java.util.Random;
 import java.util.Scanner;
 
+// vídeo que explica o padrão Stategy
 // https://www.youtube.com/watch?v=WPdrnuSHAQs
 
 // Interface que define o comportamento

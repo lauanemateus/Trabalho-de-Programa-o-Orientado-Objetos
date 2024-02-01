@@ -7,7 +7,7 @@ O código foi desenvolvido na plataforma Eclipse.
   * Se tudo ocorrer como o esperado, aparecerá no console:
 
     
-  \----------------------------------------------------\
+  \----------------------------------------------------
 
   
   Digite: 
